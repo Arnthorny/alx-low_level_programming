@@ -18,7 +18,12 @@ int main(void)
 		{
 			for (k = i; k < 10; k++)
 			{
-				for (l = j + 1; l < 10; l++)
+				if (i != k)
+					l = 0;
+				else
+					l = j + 1;
+
+				for (; l < 10; l++)
 				{
 					putchar(48 + i);
 					putchar(48 + j);
