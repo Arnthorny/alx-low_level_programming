@@ -8,7 +8,7 @@
 int main(void)
 {
 	int i = 0;
-	char word [8] = "_putchar";
+	char word[8] = "_putchar";
 
 	while (word[i] != '\0')
 	{
