@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "main.h"
 /**
-  * main - Prints all letters pf English alphabet.
+  * main - Prints the word, "_putchar".
   *
   * Return: Exit Status
   */
