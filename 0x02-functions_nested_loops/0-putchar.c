@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "main.h"
 /**
   * main - Prints all letters pf English alphabet.
   *
@@ -7,11 +7,15 @@
   */
 int main(void)
 {
-	int i;
+	int i = 0;
+	char word [8] = "_putchar";
 
-	for (i = 0; i < 26; i++)
-		putchar(97 + i);
-	putchar('\n');
+	while (word[i] != '\0')
+	{
+		_putchar(word[i]);
+		i++;
+	}
+	_putchar('\n');
 
 	return (0);
 }
