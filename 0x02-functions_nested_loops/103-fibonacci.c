@@ -16,7 +16,7 @@ int main(void)
 	{
 		int tmp = 0;
 
-		if (j % 2)
+		if (!(j % 2))
 		{
 			sum += j;
 		}

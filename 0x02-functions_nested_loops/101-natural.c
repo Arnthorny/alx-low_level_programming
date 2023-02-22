@@ -13,13 +13,13 @@ int main(void)
 
 	while (i < 1024)
 	{
-		if(!(i % 3) || !(i % 5))
-		{		
+		if (!(i % 3) || !(i % 5))
+		{
 			sum += i;
 		}
 		i++;
 	}
-	printf("%d\n" , sum);
+	printf("%d\n", sum);
 
 	return (0);
 }
