@@ -1,4 +1,22 @@
 #include "main.h"
+
+/**
+  * add_spacing - Spaces out the products.
+  * @p: The Product
+  * @i: The multiple
+  */
+void add_spacing(int p, int i)
+{
+	_putchar(',');
+	_putchar(' ');
+	if (((p + i) / 100) == 0)
+	{
+		_putchar(' ');
+		if (((p + i) / 10) == 0)
+			_putchar(' ');
+	}
+}
+
 /**
   * print_times_table - Prints the n times table.
   * @n: The integer
@@ -35,15 +53,7 @@ void print_times_table(int n)
 			_putchar((p % 10) + '0');
 			if (j < n)
 			{
-				_putchar(',');
-				_putchar(' ');
-
-				if (((p + i) / 100) == 0)
-				{
-					_putchar(' ');
-					if (((p + i) / 10) == 0)
-						_putchar(' ');
-				}
+				add_spacing(p, i);
 			}
 			j++;
 		}
@@ -51,3 +61,4 @@ void print_times_table(int n)
 		i++;
 	}
 }
+
