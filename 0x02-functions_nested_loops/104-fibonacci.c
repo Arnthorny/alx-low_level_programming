@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <signal.h>
 
 /**
   * nOfDig - Returns the number of digits in an integer
@@ -7,12 +8,10 @@
   * Return: Digits in i.
   */
 
-int nOfDig(long int i)
+int nOfDig(long i)
 {
-	int counter = 0;
+	int counter = 1;
 
-	if (i <= 0)
-		return (1);
 	while (i / 10)
 	{
 		i /= 10;
@@ -30,26 +29,29 @@ int nOfDig(long int i)
  */
 int main(void)
 {
-	unsigned long int prev_half1 = 0, prev_half2 = 1;
-	unsigned long int next_half1 = 0, next_half2 = 1;
-	unsigned long int tmp_half1, tmp_half2;
-	unsigned long int div = 1000000000;
+	long prev_half1 = 0, prev_half2 = 1;
+	long next_half1 = 0, next_half2 = 1;
+	long tmp_half1, tmp_half2;
+	long div = 10000000;
 	int j = 0;
 	int fib_count = 98;
 
 	while (j < fib_count)
 	{
 		int l = 0;
+		int n2_flo;
 
+		l = nOfDig(next_half2);
+		if (next_half2 / div)
+		{
+			n2_flo = next_half2 / div;
+			next_half1 += n2_flo;
+			next_half2 %= div;
+		}
+		l = l == nOfDig(next_half2) ? 0 : l - nOfDig(n2_flo);
 		if (next_half1)
 			printf("%ld", next_half1);
-		l = nOfDig(next_half2);
-		while (next_half2 / div)
-		{
-			next_half1 += next_half2 / div;
-			next_half2 = next_half2 % div;
-		}
-		l = l == nOfDig(next_half2) ? 0 : l - nOfDig(next_half2);
+
 		printf("%0*ld", l, next_half2);
 
 		tmp_half1 = prev_half1;
@@ -58,9 +60,9 @@ int main(void)
 		prev_half1 = next_half1;
 		prev_half2 = next_half2;
 
+		next_half1 = (tmp_half1 + prev_half1);
+		next_half2 = (tmp_half2 + prev_half2);
 
-		next_half1 = tmp_half1 + prev_half1;
-		next_half2 = tmp_half2 + prev_half2;
 		if (j < (fib_count - 1))
 			printf(", ");
 		j++;
