@@ -32,7 +32,7 @@ int main(void)
 	long prev_half1 = 0, prev_half2 = 1;
 	long next_half1 = 0, next_half2 = 1;
 	long tmp_half1, tmp_half2;
-	long div = 10000000;
+	long div = 1000000000;
 	int j = 0;
 	int fib_count = 98;
 
