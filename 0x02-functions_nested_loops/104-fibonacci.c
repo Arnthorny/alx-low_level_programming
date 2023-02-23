@@ -33,7 +33,7 @@ int main(void)
 	unsigned long int prev_half1 = 0, prev_half2 = 1;
 	unsigned long int next_half1 = 0, next_half2 = 1;
 	unsigned long int tmp_half1, tmp_half2;
-	unsigned long int div = 1000000;
+	unsigned long int div = 1000000000;
 	int j = 0;
 	int fib_count = 98;
 
