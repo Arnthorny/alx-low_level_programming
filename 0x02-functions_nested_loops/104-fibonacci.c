@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <limits.h>
-#include <math.h>
 
 /**
   * nOfDig - Returns the number of digits in an integer
@@ -9,9 +7,18 @@
   * Return: Digits in i.
   */
 
-int nOfDig(int i)
+int nOfDig(long int i)
 {
-	return (i > 0 ? (int)log10((double) i) + 1 : 1);
+	int counter = 0;
+
+	if (i <= 0)
+		return (1);
+	while (i / 10)
+	{
+		i /= 10;
+		counter++;
+	}
+	return (counter);
 }
 
 
@@ -26,7 +33,7 @@ int main(void)
 	unsigned long int prev_half1 = 0, prev_half2 = 1;
 	unsigned long int next_half1 = 0, next_half2 = 1;
 	unsigned long int tmp_half1, tmp_half2;
-	unsigned long int div = 1000000000000000000;
+	unsigned long int div = 1000000;
 	int j = 0;
 	int fib_count = 98;
 
@@ -35,7 +42,7 @@ int main(void)
 		int l = 0;
 
 		if (next_half1)
-			printf("%lu", next_half1);
+			printf("%ld", next_half1);
 		l = nOfDig(next_half2);
 		while (next_half2 / div)
 		{
