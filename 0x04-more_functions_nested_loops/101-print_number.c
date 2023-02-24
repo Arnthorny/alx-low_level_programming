@@ -1,5 +1,34 @@
 #include "main.h"
 
+
+int nOfDig(int i);
+int _pow(int m, int n);
+
+/**
+  * print_number- Prints an integer using putchar.
+  * @n : Integer to be printed.
+  *
+  */
+void print_number(int n)
+{
+	int digCount = nOfDig(n);
+	int div = _pow(10, digCount - 1);
+	int i = 0, popDig;
+	int neg = n < 0 ? 1 : 0;
+
+	if (neg)
+		_putchar('-');
+	while ((i < digCount) && div)
+	{
+		popDig = n / div;
+		n %= div;
+		div /= 10;
+		if (neg)
+			popDig *= -1;
+		_putchar('0' + popDig);
+	}
+}
+
 /**
   * nOfDig - Returns the number of digits in an integer
   * @i: The integer to be checked
@@ -43,30 +72,3 @@ int _pow(int m, int n)
 	}
 	return (mCopy);
 }
-
-
-/**
-  * print_number- Prints an integer using putchar.
-  * @n : Integer to be printed.
-  *
-  */
-void print_number(int n)
-{
-	int digCount = nOfDig(n);
-	int div = _pow(10, digCount - 1);
-	int i = 0, popDig;
-	int neg = n < 0 ? 1 : 0;
-
-	if (neg)
-		_putchar('-');
-	while ((i < digCount) && div)
-	{
-		popDig = n / div;
-		n %= div;
-		div /= 10;
-		if (neg)
-			popDig *= -1;
-		_putchar('0' + popDig);
-	}
-}
-
