@@ -18,26 +18,24 @@ int _atoi(char *s)
 		if (num_found)
 		{
 			if (!(*s >= 48 && *s <= 57))
-				return (value * sign);
-			value = (*s - '0') + (value * 10);
+				return (value);
+			value = value < 0 ? ((value * 10) - (*s - '0')) : (value * 10) + (*s - '0');
 			s++;
 		}
 		else
 		{
-			if ((*s >= 48 && *s <= 57) && !num_found)
+			if (*s >= 48 && *s <= 57)
 			{
 				num_found = 1;
+				value = (*s - '0') * sign;
 			}
-			else if ((*s == '-') && !num_found)
+			else if (*s == '-')
 			{
 				sign *= -1;
-				s++;
 			}
-			else
-				s++;
+			s++;
 			continue;
 		}
-		/*asm("int $3");*/
 	}
-	return (value * sign);
+	return (value);
 }
