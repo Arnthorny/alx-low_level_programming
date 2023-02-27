@@ -12,7 +12,7 @@ void print_rev(char *s)
 	{
 		s++;
 		if (*s == '\0')
-		{
+		{	s--;
 			while (sCopy <= s)
 			{
 				_putchar(*s);
