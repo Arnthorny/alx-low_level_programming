@@ -31,7 +31,7 @@ char *cap_string(char *s)
 
 	do {
 		v = s[i];
-		if (dl_chck(v) && (s[i + 1] >= 'a' && s[i + 1] <= 'z'))
+		if (v && dl_chck(v) && (s[i + 1] >= 'a' && s[i + 1] <= 'z'))
 		{
 			mod = (s[i + 1] - 'a') % 26;
 			s[i + 1] = 65 + mod;
