@@ -11,10 +11,10 @@ int detCase(char c)
 {
 	int test = 0, caseStart = 0;
 	int isUpper = c >= 'A' && c <= 'Z';
-	
+
 	test = isUpper && (caseStart = 65);
 	test = test || (caseStart = 97);
-	
+
 	return (caseStart);
 }
 
