@@ -2,19 +2,22 @@
 
 
 /**
-  * isLetter - Determine if a char is a letter..
+  * detCase - Determine if a char is a lower or upper.
   * @c: Char to check
-  * Return: 0 if char is not, 1 if lowercase, 2 if uppercase .
+  * Return: First letter of base.
   */
 
-int isLetter(char c)
+int detCase(char c)
 {
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	if (c >= 'A' && c <= 'Z')
-		return (2);
-	return (0);
+	int test = 0, caseStart = 0;
+	int isUpper = c >= 'A' && c <= 'Z';
+	
+	test = isUpper && (caseStart = 65);
+	test = test || (caseStart = 97);
+	
+	return (caseStart);
 }
+
 
 /**
   * rot13 - Encode a string using rot13.
@@ -23,16 +26,18 @@ int isLetter(char c)
   */
 char *rot13(char *s)
 {
-	int i = 0, type;
+	int i = 0, cBase;
+	char v;
 
 	do {
-		type = isLetter(s[i]);
-		if (type == 1)
-			s[i] = ((s[i] - 'a' + 13) % 26) + 'a';
-		if (type == 2)
-			s[i] = ((s[i] - 'A' + 13) % 26) + 'A';
+		v = s[i];
+		if ((v >= 'a' && v <= 'z') || (v >= 'A' && v <= 'Z'))
+		{
+			cBase = detCase(v);
+			s[i] = ((v - cBase + 13) % 26) + cBase;
+		}
 		i++;
-	} while (s[i]);
+	} while (v);
 
 	return (s);
 }
