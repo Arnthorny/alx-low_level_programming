@@ -35,7 +35,6 @@ char *cap_string(char *s)
 		{
 			mod = (s[i + 1] - 'a') % 26;
 			s[i + 1] = 65 + mod;
-			i++;
 		}
 		i++;
 	} while (v);
