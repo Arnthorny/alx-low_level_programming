@@ -23,15 +23,14 @@ int isLetter(char c)
   */
 char *rot13(char *s)
 {
-	int i = 0, type, base;
+	int i = 0, type;
 
 	do {
 		type = isLetter(s[i]);
-		if (type)
-		{
-			base = type == 1 ? 97 : 65;
-			s[i] = ((s[i] - base + 13) % 26) + base;
-		}
+		if (type == 1)
+			s[i] = ((s[i] - 'a' + 13) % 26) + 'a';
+		if (type == 2)
+			s[i] = ((s[i] - 'A' + 13) % 26) + 'A';
 		i++;
 	} while (s[i]);
 
