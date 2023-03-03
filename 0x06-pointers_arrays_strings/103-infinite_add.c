@@ -33,10 +33,10 @@ char *infinite_add(char *n1, char *n2, char *r, int size_r)
 	int sum = 0, i = 0;
 	int len1 = _strlen(n1), len2 = _strlen(n2);
 
+	if (size_r <= 1)
+		return 0;
 	r[--size_r] = '\0';
 	size_r--;
-	if (len1 > size_r || len2 > size_r)
-		return (0);
 	do {
 		len1--;
 		len2--;
@@ -66,5 +66,5 @@ char *infinite_add(char *n1, char *n2, char *r, int size_r)
 		}
 		r[i] = '\0';
 	}
-	return (sum == 0 ? r : 0);
+	return ((sum == 0 && len1 < 0 && len2 < 0) ? r : 0);
 }
