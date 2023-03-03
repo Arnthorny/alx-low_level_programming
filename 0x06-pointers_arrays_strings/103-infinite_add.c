@@ -34,7 +34,7 @@ char *infinite_add(char *n1, char *n2, char *r, int size_r)
 	int len1 = _strlen(n1), len2 = _strlen(n2);
 
 	r[--size_r] = '\0';
-	size_r--
+	size_r--;
 
 	if (len1 > size_r || len2 > size_r)
 		return (0);
