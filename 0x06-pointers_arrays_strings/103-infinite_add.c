@@ -36,7 +36,7 @@ char *infinite_add(char *n1, char *n2, char *r, int size_r)
 	r[--size_r] = '\0';
 	size_r--;
 
-	if (len1 > size_r || len2 > size_r)
+	if (len1 > (size_r + 1) || len2 > (size_r + 1) || size_r < 0)
 		return (0);
 	do {
 		len1--;
