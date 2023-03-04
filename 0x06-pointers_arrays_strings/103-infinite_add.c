@@ -1,12 +1,10 @@
 #include "main.h"
 
-
 /**
   * _strlen - Determine a string length.
   * @s: String
   * Return: Length of string.
   */
-
 int _strlen(char *s)
 {
 	int count = 0;
@@ -29,43 +27,41 @@ int _strlen(char *s)
   */
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
-
-	int sum = 0, i = 0;
+	int sum = 0, i = 0, j = 0, lBit1, lBit2;
 	int len1 = _strlen(n1), len2 = _strlen(n2);
 
-	r[--size_r] = '\0';
+	r[size_r - 1] = '\0';
 	size_r--;
 
-	if (len1 > (size_r + 1) || len2 > (size_r + 1) || size_r < 0)
+	if (size_r < 1 || len1 > size_r || len2 > size_r)
 		return (0);
-	do {
-		len1--;
-		len2--;
-		if ((len1 < 0) && (len2 < 0))
-		{
-			r[size_r] = (sum % 10) + '0';
-			sum /= 10;
-			break;
-		}
-		else if (len1 < 0 && len2 >= 0)
-			sum = (n2[len2] - '0') + sum;
-		else if (len2 < 0 && len1 >= 0)
-			sum = (n1[len1] - '0') + sum;
-		else
-			sum = (n1[len1] - '0') + (n2[len2] - '0') + sum;
-
-		r[size_r] = (sum % 10) + '0';
-		sum /= 10;
-	} while (--size_r >= 0);
-
-	if (size_r)
+	while ((i < size_r) &&  ((len1 > i) || (len2 > i)))
 	{
-		while (r[i + size_r])
-		{
-			r[i] = r[i + size_r];
-			i++;
-		}
-		r[i] = '\0';
+		lBit1 = (len1 > i) ? n1[len1 - i - 1] - '0' : 0;
+		lBit2 = (len2 > i) ? n2[len2 - i - 1] - '0' : 0;
+		sum = lBit1 + lBit2 + sum;
+		r[size_r - i - 1] = (sum % 10) + '0';
+		i++;
+		sum = i <= size_r ? sum / 10 : sum;
 	}
-	return (sum == 0 ? r : 0);
+	if (size_r > i)
+	{
+		if (sum)
+		{
+			r[size_r - (i++) - 1] = (sum % 10) + '0';
+			sum /= 10;
+		}
+
+		if (size_r - i)
+		{
+			j = 0;
+			while ((size_r - i) && r[size_r - i + j])
+			{
+				r[j] = r[size_r - i + j];
+				j++;
+			}
+			r[j] = '\0';
+		}
+	}
+	return ((sum == 0 && i >= len1 && i >= len2) ? r : 0);
 }
