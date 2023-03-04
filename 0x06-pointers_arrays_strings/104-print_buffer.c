@@ -47,8 +47,6 @@ void print_content(char *b, int i, int size)
 		else
 			printf(" ");
 		k++;
-		if (k == 10)
-			printf("\n");
 	}
 }
 
@@ -63,10 +61,13 @@ void print_buffer(char *b, int size)
 
 	while (i < size)
 	{
+		if (!(i % 10) && i)
+			printf("\n");
 		printf("%.8x: ", i);
 		print_hex_content(b, i, size);
 		print_content(b, i, size);
 
 		i += 10;
 	}
+	printf("\n");
 }
