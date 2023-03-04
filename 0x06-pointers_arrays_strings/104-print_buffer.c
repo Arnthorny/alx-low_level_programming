@@ -13,7 +13,7 @@ void print_hex_content(char *b, int i, int size)
 
 	while (j < 10)
 	{
-		if (!(j % 2) && j)
+		if (!(j % 2))
 			printf(" ");
 		if ((i + j) < size)
 			printf("%.2x", b[i + j]);
@@ -44,8 +44,6 @@ void print_content(char *b, int i, int size)
 			else
 				printf(".");
 		}
-		else
-			printf(" ");
 		k++;
 	}
 }
@@ -63,7 +61,7 @@ void print_buffer(char *b, int size)
 	{
 		if (!(i % 10) && i)
 			printf("\n");
-		printf("%.8x: ", i);
+		printf("%.8x:", i);
 		print_hex_content(b, i, size);
 		print_content(b, i, size);
 
