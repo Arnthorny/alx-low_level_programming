@@ -12,7 +12,7 @@ void print_diagsums(int *a, int size)
 	int tot = size * size;
 	int i = 0, j = 0, row = 0;
 	int diagsum1 = 0, diagsum2 = 0;
-	
+
 	while (row < tot)
 	{
 		j = 0;
