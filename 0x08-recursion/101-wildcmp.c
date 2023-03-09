@@ -2,16 +2,20 @@
 #include <stdio.h>
 
 /**
-  * _chrloc - Locates a character in a string.
+  * _chrloc - Locates a substring in a string.
   * @s: Pointer to string.
-  * @c: Character to be searched.
-  * Return: Pointer to char location in string, if found. Else NULL pointer.
+  * @c: substring to be searched for.
+  * Return: Pointer to substr location in string, if found. Else NULL pointer.
   */
-char *_chrloc(char *s, char c)
+char *_chrloc(char *s, char *c, int i)
 {
-	if (*s == '\0')
+	if (!*s)
 		return ('\0');
-	return ((*s == c) ? s : _chrloc((s + 1), c));
+	else if (s[i] == '\0' || c[i] == '*')
+		return (s);
+	else if ((s[i] == c[i]) && c[i] && s[i])
+		return (_chrloc(s, c, i + 1));
+	return (_chrloc(s + 1, c, 0));
 }
 
 /**
@@ -38,7 +42,7 @@ int wildcmp(char *s1, char *s2)
 		if (*(s2 + 1) == '*')
 			return (wildcmp(s1, s2 + 1));
 
-		found = _chrloc(s1 + 1, *(s2 + 1));
+		found = _chrloc(s1, (s2 + 1), 0);
 		if (found)
 			return (wildcmp(found, s2 + 1));
 		else
