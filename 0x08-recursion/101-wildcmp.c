@@ -5,6 +5,7 @@
   * _chrloc - Locates a substring in a string.
   * @s: Pointer to string.
   * @c: substring to be searched for.
+  * @i: For index
   * Return: Pointer to substr location in string, if found. Else NULL pointer.
   */
 char *_chrloc(char *s, char *c, int i)
@@ -38,7 +39,7 @@ int wildcmp(char *s1, char *s2)
 	{
 		if (*(s2 + 1) == '\0')
 			return (1);
-		
+
 		if (*(s2 + 1) == '*')
 			return (wildcmp(s1, s2 + 1));
 
