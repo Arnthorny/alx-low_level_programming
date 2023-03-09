@@ -4,7 +4,7 @@
  * subtractor - Subtracts consecutive odd nos from n.
  * @n: The number.
  * @i: An odd number.
- * Return: The final odd no as n == 0, else -1.
+ * Return: The final odd number's index, else -1.
  */
 int subtractor(int n, int i)
 {
