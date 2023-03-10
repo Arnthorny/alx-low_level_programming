@@ -1,5 +1,13 @@
 #include "main.h"
 
+
+/**
+  * main - Program to multiply two given numbers
+  * @argc: Argument count
+  * @argv: Array of strings passed
+  * Return: Exit Status Code.
+  */
+
 int main(int argc, char *argv[])
 {
 	if (argc != 3)
