@@ -45,7 +45,7 @@ int **alloc_grid(int width, int height)
 		{
 			while (i >= 0)
 			{
-				free(d_ptr);
+				free(d_ptr[i]);
 				i--;
 			}
 			return (NULL);
