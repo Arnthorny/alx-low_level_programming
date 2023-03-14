@@ -25,18 +25,19 @@ void _memset(int *s, int b, unsigned int n)
 
 int **alloc_grid(int width, int height)
 {
-	int **d_ptr, i = 0;
+	int **d_ptr, i = 0, *d_heap;
 
 	d_ptr = malloc(sizeof(int *) * height);
 
 	if (width <= 0 || height <= 0 || !d_ptr)
 		return (NULL);
 
+	d_heap = malloc(sizeof(int) * width * height);
+	if (!d_heap)
+		return (NULL);
 	while (i < height)
 	{
-		d_ptr[i] = malloc(sizeof(int) * width);
-		if (!d_ptr[i])
-			return (NULL);
+		d_ptr[i] = d_heap + (i * width);
 		_memset(d_ptr[i], 0, width);
 		i++;
 	}

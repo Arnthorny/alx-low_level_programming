@@ -9,7 +9,7 @@
 
 int _slen(char *str)
 {
-	return (!str || *str ? 1 + (_slen(str + 1)) : 0);
+	return (str && *str ? 1 + (_slen(str + 1)) : 0);
 }
 
 
@@ -34,12 +34,12 @@ char *str_concat(char *s1, char *s2)
 	sCat[lenBoth] = '\0';
 	while (i < lenBoth)
 	{
-		if (!*s1 && *s2)
+		if (!(s1 && *s1) && *s2)
 		{
 			sCat[i] = *s2;
 			s2++;
 		}
-		else
+		else if (s1)
 		{
 			sCat[i] = *s1;
 			s1++;
