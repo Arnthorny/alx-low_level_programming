@@ -9,7 +9,7 @@
 
 int _slen(char *str)
 {
-	return (*str ? 1 + (_slen(str + 1)) : 0);
+	return (!str || *str ? 1 + (_slen(str + 1)) : 0);
 }
 
 

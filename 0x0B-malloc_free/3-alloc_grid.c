@@ -35,7 +35,7 @@ int **alloc_grid(int width, int height)
 	while (i < height)
 	{
 		d_ptr[i] = malloc(sizeof(int) * width);
-		if (!d_ptr)
+		if (!d_ptr[i])
 			return (NULL);
 		_memset(d_ptr[i], 0, width);
 		i++;
