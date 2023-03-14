@@ -21,10 +21,23 @@ char *_strcpy(char *dest, char *src)
 	return (dest);
 }
 
+/**
+  * _strlen- Returns the length of a string.
+  * @str: Pointer to string.
+  * Return: Length of string.
+  */
+
 int _strlen(char *str)
 {
 	return (*str ? 1 + (_strlen(str + 1)) : 0);
 }
+
+
+/**
+  * _strdup- Copies a given string.
+  * @str: Pointer to string.
+  * Return: Pointer to string's copy.
+  */
 
 char *_strdup(char *str)
 {
@@ -32,7 +45,7 @@ char *_strdup(char *str)
 
 	if (!str)
 		return (NULL);
-	sCopy = malloc(sizeof (*str * (_strlen(str) + 1)));
+	sCopy = malloc(sizeof(*str) * (_strlen(str) + 1));
 	if (!sCopy)
 		return (NULL);
 

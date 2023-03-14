@@ -18,9 +18,17 @@ char *_memset(char *s, char b, unsigned int n)
 	return (s);
 }
 
+
+/**
+  * create_array- creates an array and fills with a given char.
+  * @size: Size of the array.
+  * @c: Character to fill with
+  * Return: Pointer to array.
+  */
+
 char *create_array(unsigned int size, char c)
 {
-	char *ptr = malloc(sizeof (char) * size);
+	char *ptr = malloc(sizeof(char) * size);
 
 	if (!ptr || !size)
 		return (NULL);
