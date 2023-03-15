@@ -43,7 +43,7 @@ char **strtow(char *str)
 		return (NULL);
 	wCount = word_count(str, *str == ' ', 0);
 	words = malloc(sizeof(char *) * (wCount + 1));
-	if (!words)
+	if (!words || !wCount)
 	{
 		free(words);
 		return (NULL);
