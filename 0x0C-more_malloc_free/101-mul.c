@@ -113,7 +113,7 @@ int cToI(char c)
 
 char *mult(char *n1, int l1, char *n2, int l2, char *res, int lenRes)
 {
-	int carry, i, j, tmpSum;
+	int carry, i, j, tmpSum, k = lenRes - 1;
 
 	res[lenRes] = '\0';
 
@@ -128,8 +128,9 @@ char *mult(char *n1, int l1, char *n2, int l2, char *res, int lenRes)
 			res[i + l2] = '0' + carry;
 		}
 	}
-	if (carry == 0)
-		res[lenRes - 1] = '\0';
+
+	while (!(res[k] - '0') && k)
+		res[k--] = '\0';
 	return (res);
 }
 
