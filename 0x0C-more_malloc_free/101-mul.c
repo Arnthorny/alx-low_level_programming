@@ -18,7 +18,8 @@ unsigned int _slen(char *str)
 void _puts(char *s)
 {
 	unsigned int i = 0;
-	while(s[i])
+
+	while (s[i])
 		_putchar(s[i++]);
 	_putchar('\n');
 }
@@ -43,6 +44,8 @@ void *_memset(void *s, char b, unsigned int n)
 /**
   * rev_str - Copies a given string and reverses it
   * @str: Given string.
+  * @size: Size of the string
+  * @readOnly: Indicates if string is stored as a literal
   * Return: Pointer to reversed string.
   */
 
@@ -52,11 +55,13 @@ char *rev_str(char *str, int size, int readOnly)
 	{
 		unsigned int i = 0;
 		char tmp, *ptr = malloc(sizeof(*ptr) * (size + 1));
+
 		if (!ptr)
 			return (NULL);
-		
+
 		ptr[size--] = '\0';
-		while(str[i])
+
+		while (str[i])
 		{
 			tmp = str[i++];
 			if (!(tmp >= '0' && tmp <= '9'))
@@ -96,7 +101,7 @@ int cToI(char c)
 }
 
 /**
-  *mult: This function uses the long multiplication algorithm to multiply numbers
+  *mult - This function uses the long multiplication algo to multiply numbers
   *@n1: First number
   *@n2: Second number
   *@l1: Length of n1.
@@ -111,7 +116,7 @@ char *mult(char *n1, int l1, char *n2, int l2, char *res, int lenRes)
 	int carry, i, j, tmpSum;
 
 	res[lenRes] = '\0';
-	
+
 	for (i = 0; i < l1; i++)
 	{
 		carry = 0;
@@ -139,31 +144,31 @@ int main(int argc, char *argv[])
 {
 	int len1, len2, lenRes;
 	char *result, *rev1, *rev2;
-	
+
 	if (argc != 3)
 	{
 		_puts("Error\n");
 		exit(98);
 	}
-	
+
 	len1 = _slen(argv[1]);
 	len2 = _slen(argv[2]);
-	
+
 	rev1 = rev_str(argv[1], len1, 1);
 	rev2 = rev_str(argv[2], len2, 1);
-	
+
 	lenRes = len1 + len2;
 	result = malloc(sizeof(*result) * (lenRes + 1));
 
-	if(!result)
+	if (!result)
 		return (1);
 	result = _memset(result, '0', lenRes);
-	
+
 	if (len1 > len2)
 		result = mult(rev1, len1, rev2, len2, result, lenRes);
 	else
 		result = mult(rev2, len2, rev1, len1, result, lenRes);
-	
+
 	rev_str(result, lenRes, 0);
 	_puts(result);
 	free(rev1);
