@@ -67,7 +67,7 @@ char *rev_str(char *str, int size, int readOnly)
 			if (!(tmp >= '0' && tmp <= '9'))
 			{
 				free(ptr);
-				_puts("Error\n");
+				_puts("Error");
 				exit(98);
 			}
 			ptr[size--] = tmp;
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
 	if (argc != 3)
 	{
-		_puts("Error\n");
+		_puts("Error");
 		exit(98);
 	}
 
