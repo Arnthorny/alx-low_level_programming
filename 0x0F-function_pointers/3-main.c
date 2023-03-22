@@ -13,10 +13,16 @@ int main(int argc, char *argv[])
 	int val;
 	int (*func)(int a, int b);
 
-	if (argc != 4 || strlen(argv[2]) != 1)
+	if (argc != 4)
 	{
 		printf("Error\n");
 		return (98);
+	}
+
+	if (strlen(argv[2]) != 1)
+	{
+		printf("Error\n");
+		return (99);
 	}
 
 	func = get_op_func(argv[2]);
