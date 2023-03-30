@@ -10,6 +10,9 @@
 
 size_t print_list(const list_t *h)
 {
+	if (!h)
+		return (0);
+
 	printf("[%d] %s\n", h->len, h->str ? h->str : "(nil)");
 	return (1 + ((h->next) ? print_list(h->next) : 0));
 
