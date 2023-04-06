@@ -59,13 +59,14 @@ size_t print_listint_safe(const listint_t *head)
 				printf("-> [%p] %d\n", (void *)s, s->n);
 				return (count);
 			}
-
-			if (count == 1)
+			/*
+			*if (count == 1)
 			{
 				printf("[%p] %d\n", (void *)ret->next, ret->n);
 				printf("-> [%p] %d\n", (void *)s, s->n);
 				return (count + 1);
 			}
+			*/
 		}
 	}
 	return (count);
