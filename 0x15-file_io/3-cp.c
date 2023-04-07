@@ -49,19 +49,33 @@ void copy_fn(char *file_from, char *file_to)
 	int r, w, fd_from, fd_to;
 
 	fd_from = open(file_from, O_RDONLY);
-	fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, 00664);
 
-	if (fd_to < 0)
+	if (fd_from == -1)
+		err_prnt(98, file_from);
+
+	fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, 00664);
+	if (fd_to == -1)
+	{
+		close_fd(fd_from);
 		err_prnt(99, file_to);
+	}
 
 	do {
 		r = read(fd_from, buf, 1024);
-		if (fd_from < 0 || r < 0)
+		if (r == -1)
+		{
 			err_prnt(98, file_from);
+			close_fd(fd_to);
+			close_fd(fd_from);
+		}
 
 		w = write(fd_to, buf, r);
-		if (w != r || w < 0)
+		if (w == -1 || w != r)
+		{
 			err_prnt(99, file_to);
+			close_fd(fd_to);
+			close_fd(fd_from);
+		}
 
 	} while (r > 0);
 
@@ -87,9 +101,9 @@ int main(int argc, char *argv[])
 	file_from = argv[1];
 	file_to = argv[2];
 
-	if (!file_from)
+	if (file_from == NULL)
 		err_prnt(98, file_from);
-	if (!file_to)
+	if (file_to == NULL)
 		err_prnt(99, file_to);
 	copy_fn(file_from, file_to);
 	return (0);
