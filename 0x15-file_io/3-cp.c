@@ -68,17 +68,17 @@ void copy_fn(char *file_from, char *file_to)
 			break;
 		if (r == -1)
 		{
-			err_prnt(98, file_from);
 			close_fd(fd_to);
 			close_fd(fd_from);
+			err_prnt(98, file_from);
 		}
 
 		w = write(fd_to, buf, r);
 		if (w == -1 || w != r)
 		{
-			err_prnt(99, file_to);
 			close_fd(fd_to);
 			close_fd(fd_from);
+			err_prnt(99, file_to);
 		}
 
 	} while (r > 0);
