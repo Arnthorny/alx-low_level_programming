@@ -1,5 +1,4 @@
 #include "main.h"
-#include <string.h>
 
 /**
   *err_prnt - A function that handles error printing.
@@ -29,12 +28,15 @@ void err_prnt(int err_code, __attribute__((unused))void *ptr)
 /**
   *close_fd - A function to close fildes.
   *@fd: Fildes.
+  *@end: 0 or 1 value to indicate end of program
   */
 
-void close_fd(int fd)
+void close_fd(int fd, int end)
 {
-	if (close(fd) != 0)
+	if (end && (close(fd) == -1))
 		err_prnt(100, &fd);
+	else if (fd != -1)
+		close(fd);
 }
 
 /**
@@ -47,7 +49,7 @@ void copy_fn(char *file_from, char *file_to)
 {
 	char buf[1024] = {0};
 	mode_t umsk;
-	int r, w, fd_from, fd_to;
+	ssize_t r, w, fd_from, fd_to;
 
 	fd_from = open(file_from, O_RDONLY);
 
@@ -58,7 +60,7 @@ void copy_fn(char *file_from, char *file_to)
 	fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, 00664);
 	if (fd_to == -1)
 	{
-		close_fd(fd_from);
+		close_fd(fd_from , 0);
 		err_prnt(99, file_to);
 	}
 	umask(umsk);
@@ -68,22 +70,22 @@ void copy_fn(char *file_from, char *file_to)
 			break;
 		if (r == -1)
 		{
-			close_fd(fd_to);
-			close_fd(fd_from);
+			close_fd(fd_to, 0);
+			close_fd(fd_from, 0);
 			err_prnt(98, file_from);
 		}
 
 		w = write(fd_to, buf, r);
 		if (w == -1 || w != r)
 		{
-			close_fd(fd_to);
-			close_fd(fd_from);
+			close_fd(fd_to, 0);
+			close_fd(fd_from, 0);
 			err_prnt(99, file_to);
 		}
 
 	} while (r > 0);
-	close_fd(fd_from);
-	close_fd(fd_to);
+	close_fd(fd_from, 1);
+	close_fd(fd_to, 1);
 }
 
 
