@@ -46,6 +46,7 @@ void close_fd(int fd)
 void copy_fn(char *file_from, char *file_to)
 {
 	char buf[1024] = {0};
+	mode_t umsk;
 	int r, w, fd_from, fd_to;
 
 	fd_from = open(file_from, O_RDONLY);
@@ -53,15 +54,18 @@ void copy_fn(char *file_from, char *file_to)
 	if (fd_from == -1)
 		err_prnt(98, file_from);
 
+	umsk = umask(0);
 	fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, 00664);
 	if (fd_to == -1)
 	{
 		close_fd(fd_from);
 		err_prnt(99, file_to);
 	}
-
+	umask(umsk);
 	do {
 		r = read(fd_from, buf, 1024);
+		if (r == 0)
+			break;
 		if (r == -1)
 		{
 			err_prnt(98, file_from);
@@ -78,7 +82,6 @@ void copy_fn(char *file_from, char *file_to)
 		}
 
 	} while (r > 0);
-
 	close_fd(fd_from);
 	close_fd(fd_to);
 }
