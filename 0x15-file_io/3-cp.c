@@ -28,7 +28,6 @@ void err_prnt(int err_code, __attribute__((unused))void *ptr)
 /**
   *close_fd - A function to close fildes.
   *@fd: Fildes.
-  *@end: 0 or 1 value to indicate end of program
   */
 
 void close_fd(int fd)
