@@ -10,16 +10,16 @@ void err_prnt(int err_code, __attribute__((unused))void *ptr)
 	switch (err_code)
 	{
 		case 97:
-			dprintf(2, "Usage: cp file_from file_to\n");
+			dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
 			break;
 		case 98:
-			dprintf(2, "Error: Can't read from file %s\n", (char *) ptr);
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", (char *) ptr);
 			break;
 		case 99:
-			dprintf(2, "Error: Can't write to file %s\n", (char *) ptr);
+			dprintf(STDERR_FILENO, "Error: Can't write to file %s\n", (char *) ptr);
 			break;
 		case 100:
-			dprintf(2, "Error: Can't close fd %d\n", *(int *) ptr);
+			dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", *(int *) ptr);
 			break;
 	}
 	exit(err_code);
@@ -31,12 +31,10 @@ void err_prnt(int err_code, __attribute__((unused))void *ptr)
   *@end: 0 or 1 value to indicate end of program
   */
 
-void close_fd(int fd, int end)
+void close_fd(int fd)
 {
-	if (end && (close(fd) == -1))
+	if (close(fd) == -1)
 		err_prnt(100, &fd);
-	else if (fd != -1)
-		close(fd);
 }
 
 /**
@@ -48,44 +46,30 @@ void close_fd(int fd, int end)
 void copy_fn(char *file_from, char *file_to)
 {
 	char buf[1024] = {0};
-	mode_t umsk;
-	ssize_t r, w, fd_from, fd_to;
+	int r, w, fd_from, fd_to;
 
 	fd_from = open(file_from, O_RDONLY);
 
 	if (fd_from == -1)
 		err_prnt(98, file_from);
 
-	umsk = umask(0);
 	fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, 00664);
 	if (fd_to == -1)
-	{
-		close_fd(fd_from , 0);
 		err_prnt(99, file_to);
-	}
-	umask(umsk);
+
 	do {
 		r = read(fd_from, buf, 1024);
-		if (r == 0)
-			break;
 		if (r == -1)
-		{
-			close_fd(fd_to, 0);
-			close_fd(fd_from, 0);
 			err_prnt(98, file_from);
-		}
 
 		w = write(fd_to, buf, r);
 		if (w == -1 || w != r)
-		{
-			close_fd(fd_to, 0);
-			close_fd(fd_from, 0);
 			err_prnt(99, file_to);
-		}
 
 	} while (r > 0);
-	close_fd(fd_from, 1);
-	close_fd(fd_to, 1);
+
+	close_fd(fd_from);
+	close_fd(fd_to);
 }
 
 
@@ -106,10 +90,6 @@ int main(int argc, char *argv[])
 	file_from = argv[1];
 	file_to = argv[2];
 
-	if (file_from == NULL)
-		err_prnt(98, file_from);
-	if (file_to == NULL)
-		err_prnt(99, file_to);
 	copy_fn(file_from, file_to);
 	return (0);
 }
