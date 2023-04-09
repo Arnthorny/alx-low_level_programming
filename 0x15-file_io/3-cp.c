@@ -5,8 +5,9 @@
   *@err_code: Error code.
   *@ptr: Part of error msg to be printed.
   */
-void err_prnt(int err_code, __attribute__((unused))void *ptr)
+void err_prnt(int err_code, void *ptr)
 {
+	ptr = ptr;
 	switch (err_code)
 	{
 		case 97:
@@ -16,10 +17,10 @@ void err_prnt(int err_code, __attribute__((unused))void *ptr)
 			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", (char *) ptr);
 			break;
 		case 99:
-			dprintf(STDERR_FILENO, "Error: Can't write to file %s\n", (char *) ptr);
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", (char *) ptr);
 			break;
 		case 100:
-			dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", *(int *) ptr);
+			dprintf(STDERR_FILENO, "Error: Can't close fd FD_VALUE %d\n", *(int *) ptr);
 			break;
 	}
 	exit(err_code);
@@ -32,7 +33,9 @@ void err_prnt(int err_code, __attribute__((unused))void *ptr)
 
 void close_fd(int fd)
 {
-	if (close(fd) == -1)
+	int c = close(fd);
+
+	if (c == -1)
 		err_prnt(100, &fd);
 }
 
@@ -48,23 +51,24 @@ void copy_fn(char *file_from, char *file_to)
 	int r, w, fd_from, fd_to;
 
 	fd_from = open(file_from, O_RDONLY);
-
 	if (fd_from == -1)
 		err_prnt(98, file_from);
 
-	fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, 00664);
+	fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	if (fd_to == -1)
 		err_prnt(99, file_to);
 
+	r = read(fd_from, buf, 1024);
+	if (r == -1)
+		err_prnt(98, file_from);
 	do {
+		w = write(fd_to, buf, r);
+		if (w == -1)
+			err_prnt(99, file_to);
+
 		r = read(fd_from, buf, 1024);
 		if (r == -1)
 			err_prnt(98, file_from);
-
-		w = write(fd_to, buf, r);
-		if (w == -1 || w != r)
-			err_prnt(99, file_to);
-
 	} while (r > 0);
 
 	close_fd(fd_from);
