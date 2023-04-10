@@ -15,7 +15,7 @@
 
 
 typedef ElfA(Ehdr) El;
-typedef void* (*hdr_func)(El *);
+typedef void (*hdr_func)(El *, char *);
 
 
 #endif /* _HOLBERTON_H */

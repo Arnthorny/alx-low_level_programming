@@ -1,16 +1,18 @@
 #include "holberton.h"
 #include "main.h"
+#include <stdint.h>
 
-void err_p(char *str, char *file);
+void err_p(char *str, void *, int);
 void prnt_elf(El *header_ptr);
+void close_elf(int fd);
 
-void *prnt_class(El *header_ptr);
-void *prnt_data(El *header_ptr);
-void *prnt_ver(El *header_ptr);
-void *prnt_osabi(El *header_ptr);
-void *prnt_abiVer(El *header_ptr);
-void *prnt_type(El *header_ptr);
-void *prnt_epa(El *header_ptr);
+void prnt_class(El *header_ptr, char *);
+void prnt_data(El *header_ptr, char *);
+void prnt_ver(El *header_ptr, char *);
+void prnt_osabi(El *header_ptr, char *);
+void prnt_abiVer(El *header_ptr, char *);
+void prnt_type(El *header_ptr,  char *);
+void prnt_epa(El *header_ptr, char *);
 
 /**
   *main - A program that displays information in an ELF file.
@@ -25,26 +27,26 @@ int main(int argc, char *argv[])
 	El header;
 
 	if (argc != 2)
-		err_p("Usage: elf_header elf_filename", NULL);
+		err_p("Usage: elf_header elf_filename", NULL, 0);
 
 	elf_file = argv[1];
 	fd = open(elf_file, O_RDONLY);
 
 	if (fd == -1)
-		err_p("Error: Can't open ", elf_file);
+		err_p("Error: Can't open ", elf_file, 0);
 
 	r = read(fd, &header, sizeof(header));
 	if (r == -1)
 	{
-		err_p("Error: Can't read from ", elf_file);
-		close(fd);
+		close_elf(fd);
+		err_p("Error: Can't read from ", elf_file, 0);
 	}
 
 	if (!memcmp(header.e_ident, ELFMAG, 4) == 0)
-		err_p("Invalid ELF file: ", elf_file);
+		err_p("Invalid ELF file: ", elf_file, 0);
 
 	prnt_elf(&header);
-	close(fd);
+	close_elf(fd);
 
 	return (0);
 }
@@ -52,11 +54,15 @@ int main(int argc, char *argv[])
 /**
   *err_p - A function that handles error printing.
   *@str: Error message to print.
-  *@file: Filename if required.
+  *@f: Filename if required or fd.
+  *@end: Integer to indicate f is an fd.
   */
-void err_p(char *str, char *file)
+void err_p(char *str, void *f, int end)
 {
-	dprintf(2, "%s%s\n", str, file ? file : "");
+	if (end)
+		dprintf(2, "%s%d\n", str, *(int *)f);
+	else
+		dprintf(2, "%s%s\n", str, f ? (char *)f : "");
 	exit(98);
 }
 
@@ -97,166 +103,189 @@ void prnt_elf(El *header_ptr)
 	i = 0;
 	while (titl[i])
 	{
-		if (titl[i + 1])
-			printf("  %-35s%s\n", titl[i], (char *) sel_fn[i](header_ptr));
-		else
-			printf("  %-35s%#lx\n", titl[i], *(unsigned long *) sel_fn[i](header_ptr));
+		sel_fn[i](header_ptr, titl[i]);
 		i++;
 	}
 
 }
 
 /**
-  *prnt_class - Function to return information about ELF arch
+  *prnt_class - Function to print information about ELF arch
   *@header_ptr: Pointer to Struct containing the information
-  *Return: Appropriate string, same as 'readelf -h' format
+  *@titl: Title of current information.
   */
 
-void *prnt_class(El *header_ptr)
+void prnt_class(El *header_ptr, char *titl)
 {
 	switch (header_ptr->e_ident[EI_CLASS])
 	{
 		case ELFCLASSNONE:
-			return ("none");
+			printf("  %-35s%s\n", titl, "none");
+			break;
 		case ELFCLASS32:
-			return ("ELF32");
+			printf("  %-35s%s\n", titl, "ELF32");
+			break;
 		case ELFCLASS64:
-			return ("ELF64");
+			printf("  %-35s%s\n", titl, "ELF64");
+			break;
 		default:
-			err_p("Can't read binary's arch", NULL);
+			printf("  %-35s<unknown: %x>\n", titl, header_ptr->e_ident[EI_CLASS]);
 	}
-	return (NULL);
 }
 
 /**
-  *prnt_data - Function to return information about ELF data encoding
+  *prnt_data - Function to print information about ELF data encoding
   *@header_ptr: Pointer to Struct containing the information
-  *Return: Appropriate string, same as 'readelf -h' format
+  *@titl: Title of current information.
   */
-void *prnt_data(El *header_ptr)
+void prnt_data(El *header_ptr, char *titl)
 {
 	switch (header_ptr->e_ident[EI_DATA])
 	{
 		case ELFDATANONE:
-			return ("none");
+			printf("  %-35s%s\n", titl, "none");
+			break;
 		case ELFDATA2LSB:
-			return ("2's complement, little endian");
+			printf("  %-35s%s\n", titl, "2's complement, little endian");
+			break;
 		case ELFDATA2MSB:
-			return ("2's complement, big endian");
+			printf("  %-35s%s\n", titl, "2's complement, big endian");
+			break;
 		default:
-			err_p("Can't read binary's data encoding type", NULL);
+			printf("  %-35s<unknown: %x>\n", titl, header_ptr->e_ident[EI_DATA]);
 	}
-	return (NULL);
 }
 
 /**
-  *prnt_ver - Function to return information about ELF spec version number
+  *prnt_ver - Function to print information about ELF spec version number
   *@header_ptr: Pointer to Struct containing the information
-  *Return: Appropriate string, same as 'readelf -h' format
+  *@titl: Title of current information.
   */
-void *prnt_ver(El *header_ptr)
+void prnt_ver(El *header_ptr, char *titl)
 {
 	switch (header_ptr->e_ident[EI_VERSION])
 	{
-		case EV_NONE:
-			return ("0");
 		case EV_CURRENT:
-			return ("1 (current)");
+			printf("  %-35s%s\n", titl, "1 (current)");
+			break;
 		default:
-			err_p("Can't determine ELF version number", NULL);
+			printf("  %-35s%d\n", titl, header_ptr->e_ident[EI_VERSION]);
 	}
-	return (NULL);
 }
 
 /**
-  *prnt_osabi - Function to return information about ELF OS and target ABI.
+  *prnt_osabi - Function to print information about ELF OS and target ABI.
   *@header_ptr: Pointer to Struct containing the information
-  *Return: Appropriate string, same as 'readelf -h' format
+  *@titl: Title of current information.
   */
-void *prnt_osabi(El *header_ptr)
+void prnt_osabi(El *header_ptr, char *titl)
 {
 	switch (header_ptr->e_ident[EI_OSABI])
 	{
 		case ELFOSABI_SYSV:
-			return ("Unix - System V");
+			printf("  %-35s%s\n", titl, "Unix - System V");
+			break;
 		case ELFOSABI_HPUX:
-			return ("Unix - HP-UX");
+			printf("  %-35s%s\n", titl, "Unix - HP-UX");
+			break;
 		case ELFOSABI_NETBSD:
-			return ("Unix - NetBSD");
+			printf("  %-35s%s\n", titl, "Unix - NetBSD");
+			break;
 		case ELFOSABI_LINUX:
-			return ("Unix - GNU");
+			printf("  %-35s%s\n", titl, "Unix - GNU");
+			break;
 		case ELFOSABI_SOLARIS:
-			return ("Unix - Solaris");
-		case ELFOSABI_AIX:
-			return ("Unix - AIX");
+			printf("  %-35s%s\n", titl, "Unix - Solaris");
+			break;
 		case ELFOSABI_IRIX:
-			return ("Unix - IRIX");
+			printf("  %-35s%s\n", titl, "Unix - IRIX");
+			break;
 		case ELFOSABI_FREEBSD:
-			return ("Unix - FreeBSD");
+			printf("  %-35s%s\n", titl, "Unix - FreeBSD");
+			break;
 		case ELFOSABI_TRU64:
-			return ("Unix - TRU64");
-		case ELFOSABI_MODESTO:
-			return ("Novell - Modesto");
-		case ELFOSABI_OPENBSD:
-			return ("Unix - OpenBSD");
+			printf("  %-35s%s\n", titl, "Unix - TRU64");
+			break;
 		case ELFOSABI_ARM:
-			return ("ARM");
+			printf("  %-35s%s\n", titl, "ARM");
+			break;
 		case ELFOSABI_STANDALONE:
-			return ("Stand-alone");
+			printf("  %-35s%s\n", titl, "Standalone App");
+			break;
 		default:
-			err_p("Can't determine operating system and ABI", NULL);
+			printf("  %-35s<unknown: %x>\n", titl, header_ptr->e_ident[EI_OSABI]);
 	}
-	return (NULL);
 }
 
 /**
-  *prnt_abiVer - Fn to return information about ABI version of target object.
+  *prnt_abiVer - Fn to print information about ABI version of target object.
   *@header_ptr: Pointer to Struct containing the information
-  *Return: Appropriate string, same as 'readelf -h' format
+  *@titl: Title of current information.
   */
-void *prnt_abiVer(El *header_ptr)
+void prnt_abiVer(El *header_ptr, char *titl)
 {
-	switch (header_ptr->e_ident[EI_ABIVERSION])
-	{
-		case 0:
-			return ("0");
-		default:
-			err_p("Non conformant ABI version", NULL);
-	}
-	return (NULL);
+	printf("  %-35s%d\n", titl, header_ptr->e_ident[EI_ABIVERSION]);
 }
 
 /**
-  *prnt_type - Function to return information about object file type
+  *prnt_type - Function to print information about object file type
   *@header_ptr: Pointer to Struct containing the information
-  *Return: Appropriate string, same as 'readelf -h' format
+  *@titl: Title of current information.
   */
-void *prnt_type(El *header_ptr)
+void prnt_type(El *header_ptr, char *titl)
 {
-	switch (header_ptr->e_type)
+	uint16_t tmp = header_ptr->e_type;
+
+	if (header_ptr->e_ident[EI_DATA] == ELFDATA2MSB)
+		tmp = header_ptr->e_type >> 8;
+	switch (tmp)
 	{
 		case ET_NONE:
-			return ("NONE (None)");
+			printf("  %-35s%s\n", titl, "NONE (None)");
+			break;
 		case ET_REL:
-			return ("REL (Relocatable file)");
+			printf("  %-35s%s\n", titl, "REL (Relocatable file)");
+			break;
 		case ET_EXEC:
-			return ("EXEC (Executable file)");
+			printf("  %-35s%s\n", titl, "EXEC (Executable file)");
+			break;
 		case ET_DYN:
-			return ("DYN (Shared object file)");
+			printf("  %-35s%s\n", titl, "DYN (Shared object file)");
+			break;
 		case ET_CORE:
-			return ("CORE (Core file)");
+			printf("  %-35s%s\n", titl, "CORE (Core file)");
+			break;
 		default:
-			err_p("Invalid object file type", NULL);
+			printf("  %-35s<unknown: %x>\n", titl, header_ptr->e_type);
 	}
-	return (NULL);
 }
 
 /**
-  *prnt_epa - Function to return info about entry point address
-  *@header_ptr: Pointer to Struct containing the information
-  *Return: Pointer to hex address, same as 'readelf -h' format
+  *prnt_epa - Function to print info about entry point address
+  *@h_ptr: Pointer to Struct containing the information
+  *@titl: Title of current information.
   */
-void *prnt_epa(El *header_ptr)
+void prnt_epa(El *h_ptr, char *titl)
 {
-	return (&(header_ptr->e_entry));
+	if (h_ptr->e_ident[EI_DATA] == ELFDATA2MSB)
+	{
+		h_ptr->e_entry = ((h_ptr->e_entry << 8) & 0xFF00FF00)
+			| ((h_ptr->e_entry >> 8) & 0xFF00FF);
+		h_ptr->e_entry = (h_ptr->e_entry << 16) | (h_ptr->e_entry >> 16);
+	}
+
+	if (h_ptr->e_ident[EI_CLASS] == ELFCLASS32)
+		printf("  %-35s%#x\n", titl, (unsigned int)h_ptr->e_entry);
+	else
+		printf("  %-35s%#lx\n", titl, h_ptr->e_entry);
+}
+
+/**
+  *close_elf - Function to close fd.
+  *@fd: fildes.
+  */
+void close_elf(int fd)
+{
+	if (close(fd) == -1)
+		err_p("Error: Can't close fildes ", &fd, 1);
 }
