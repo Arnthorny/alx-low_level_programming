@@ -95,10 +95,10 @@ void prnt_elf(El *header_ptr)
 	};
 
 	printf("ELF Header:\n");
-	printf("%8s   ", "Magic:");
+	printf("  %s   ", "Magic:");
 	for (i = 0; i < EI_NIDENT - 1; i++)
-		printf("%02hx ", header_ptr->e_ident[i]);
-	printf("%02hx\n", header_ptr->e_ident[i]);
+		printf("%02x ", header_ptr->e_ident[i]);
+	printf("%02x\n", header_ptr->e_ident[i]);
 
 	i = 0;
 	while (titl[i])
@@ -117,19 +117,20 @@ void prnt_elf(El *header_ptr)
 
 void prnt_class(El *header_ptr, char *titl)
 {
+	printf("  %s                             ", titl);
 	switch (header_ptr->e_ident[EI_CLASS])
 	{
 		case ELFCLASSNONE:
-			printf("  %-35s%s\n", titl, "none");
+			printf("%s\n", "none");
 			break;
 		case ELFCLASS32:
-			printf("  %-35s%s\n", titl, "ELF32");
+			printf("%s\n", "ELF32");
 			break;
 		case ELFCLASS64:
-			printf("  %-35s%s\n", titl, "ELF64");
+			printf("%s\n", "ELF64");
 			break;
 		default:
-			printf("  %-35s<unknown: %x>\n", titl, header_ptr->e_ident[EI_CLASS]);
+			printf("<unknown: %x>\n", header_ptr->e_ident[EI_CLASS]);
 	}
 }
 
@@ -140,19 +141,20 @@ void prnt_class(El *header_ptr, char *titl)
   */
 void prnt_data(El *header_ptr, char *titl)
 {
+	printf("  %s                              ", titl);
 	switch (header_ptr->e_ident[EI_DATA])
 	{
 		case ELFDATANONE:
-			printf("  %-35s%s\n", titl, "none");
+			printf("%s\n", "none");
 			break;
 		case ELFDATA2LSB:
-			printf("  %-35s%s\n", titl, "2's complement, little endian");
+			printf("%s\n", "2's complement, little endian");
 			break;
 		case ELFDATA2MSB:
-			printf("  %-35s%s\n", titl, "2's complement, big endian");
+			printf("%s\n", "2's complement, big endian");
 			break;
 		default:
-			printf("  %-35s<unknown: %x>\n", titl, header_ptr->e_ident[EI_DATA]);
+			printf("<unknown: %x>\n", header_ptr->e_ident[EI_DATA]);
 	}
 }
 
@@ -163,13 +165,14 @@ void prnt_data(El *header_ptr, char *titl)
   */
 void prnt_ver(El *header_ptr, char *titl)
 {
+	printf("  %s                           ", titl);
 	switch (header_ptr->e_ident[EI_VERSION])
 	{
 		case EV_CURRENT:
-			printf("  %-35s%s\n", titl, "1 (current)");
+			printf("%d %s\n", EV_CURRENT, "(current)");
 			break;
 		default:
-			printf("  %-35s%d\n", titl, header_ptr->e_ident[EI_VERSION]);
+			printf("%d\n", header_ptr->e_ident[EI_VERSION]);
 	}
 }
 
@@ -180,40 +183,41 @@ void prnt_ver(El *header_ptr, char *titl)
   */
 void prnt_osabi(El *header_ptr, char *titl)
 {
+	printf("  %s                            ", titl);
 	switch (header_ptr->e_ident[EI_OSABI])
 	{
 		case ELFOSABI_SYSV:
-			printf("  %-35s%s\n", titl, "Unix - System V");
+			printf("%s\n", "UNIX - System V");
 			break;
 		case ELFOSABI_HPUX:
-			printf("  %-35s%s\n", titl, "Unix - HP-UX");
+			printf("%s\n", "UNIX - HP-UX");
 			break;
 		case ELFOSABI_NETBSD:
-			printf("  %-35s%s\n", titl, "Unix - NetBSD");
+			printf("%s\n", "UNIX - NetBSD");
 			break;
 		case ELFOSABI_LINUX:
-			printf("  %-35s%s\n", titl, "Unix - GNU");
+			printf("%s\n", "UNIX - Linux");
 			break;
 		case ELFOSABI_SOLARIS:
-			printf("  %-35s%s\n", titl, "Unix - Solaris");
+			printf("%s\n", "UNIX - Solaris");
 			break;
 		case ELFOSABI_IRIX:
-			printf("  %-35s%s\n", titl, "Unix - IRIX");
+			printf("%s\n", "UNIX - IRIX");
 			break;
 		case ELFOSABI_FREEBSD:
-			printf("  %-35s%s\n", titl, "Unix - FreeBSD");
+			printf("%s\n", "UNIX - FreeBSD");
 			break;
 		case ELFOSABI_TRU64:
-			printf("  %-35s%s\n", titl, "Unix - TRU64");
+			printf("%s\n", "UNIX - TRU64");
 			break;
 		case ELFOSABI_ARM:
-			printf("  %-35s%s\n", titl, "ARM");
+			printf("%s\n", "ARM");
 			break;
 		case ELFOSABI_STANDALONE:
-			printf("  %-35s%s\n", titl, "Standalone App");
+			printf("%s\n", "Standalone App");
 			break;
 		default:
-			printf("  %-35s<unknown: %x>\n", titl, header_ptr->e_ident[EI_OSABI]);
+			printf("<unknown: %x>\n", header_ptr->e_ident[EI_OSABI]);
 	}
 }
 
@@ -224,7 +228,8 @@ void prnt_osabi(El *header_ptr, char *titl)
   */
 void prnt_abiVer(El *header_ptr, char *titl)
 {
-	printf("  %-35s%d\n", titl, header_ptr->e_ident[EI_ABIVERSION]);
+	printf("  %s                       ", titl);
+	printf("%d\n", header_ptr->e_ident[EI_ABIVERSION]);
 }
 
 /**
@@ -236,27 +241,28 @@ void prnt_type(El *header_ptr, char *titl)
 {
 	uint16_t tmp = header_ptr->e_type;
 
+	printf("  %s                              ", titl);
 	if (header_ptr->e_ident[EI_DATA] == ELFDATA2MSB)
 		tmp = header_ptr->e_type >> 8;
 	switch (tmp)
 	{
 		case ET_NONE:
-			printf("  %-35s%s\n", titl, "NONE (None)");
+			printf("%s\n", "NONE (None)");
 			break;
 		case ET_REL:
-			printf("  %-35s%s\n", titl, "REL (Relocatable file)");
+			printf("%s\n", "REL (Relocatable file)");
 			break;
 		case ET_EXEC:
-			printf("  %-35s%s\n", titl, "EXEC (Executable file)");
+			printf("%s\n", "EXEC (Executable file)");
 			break;
 		case ET_DYN:
-			printf("  %-35s%s\n", titl, "DYN (Shared object file)");
+			printf("%s\n", "DYN (Shared object file)");
 			break;
 		case ET_CORE:
-			printf("  %-35s%s\n", titl, "CORE (Core file)");
+			printf("%s\n", "CORE (Core file)");
 			break;
 		default:
-			printf("  %-35s<unknown: %x>\n", titl, header_ptr->e_type);
+			printf("<unknown: %x>\n", header_ptr->e_type);
 	}
 }
 
@@ -267,6 +273,7 @@ void prnt_type(El *header_ptr, char *titl)
   */
 void prnt_epa(El *h_ptr, char *titl)
 {
+	printf("  %s               ", titl);
 	if (h_ptr->e_ident[EI_DATA] == ELFDATA2MSB)
 	{
 		h_ptr->e_entry = ((h_ptr->e_entry << 8) & 0xFF00FF00)
@@ -275,9 +282,9 @@ void prnt_epa(El *h_ptr, char *titl)
 	}
 
 	if (h_ptr->e_ident[EI_CLASS] == ELFCLASS32)
-		printf("  %-35s%#x\n", titl, (unsigned int)h_ptr->e_entry);
+		printf("%#x\n", (unsigned int)h_ptr->e_entry);
 	else
-		printf("  %-35s%#lx\n", titl, h_ptr->e_entry);
+		printf("%#lx\n", h_ptr->e_entry);
 }
 
 /**
