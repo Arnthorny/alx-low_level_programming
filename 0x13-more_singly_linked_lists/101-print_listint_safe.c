@@ -4,16 +4,13 @@
 /**
   *find_loop_start - Find start of loop.
   *@head: A singly linked list
+  *@ind: Index to indicate loop's position
   *Return: The number of nodes in the list.
  */
-
-listint_t const *find_loop_start(const listint_t *head)
+listint_t const *find_loop_start(const listint_t *head, size_t *ind)
 {
 	const listint_t *s = head, *f = head;
 	short int firstMatch = 0;
-
-	if (!head)
-		exit(98);
 
 	while (s)
 	{
@@ -25,6 +22,8 @@ listint_t const *find_loop_start(const listint_t *head)
 
 		if (f && f == s)
 		{
+			*ind += 1;
+			firstMatch = (firstMatch || s == s->next) ? 1 : 0;
 			if (firstMatch)
 				return (s);
 			s = head;
@@ -41,32 +40,26 @@ listint_t const *find_loop_start(const listint_t *head)
   *@head: A singly linked list
   *Return: The number of nodes in the list.
  */
-
 size_t print_listint_safe(const listint_t *head)
 {
-	size_t loopC = 0, count = 0;
-	const listint_t *ret = find_loop_start(head), *s = head;
+	size_t count = 0, i = 0, lCount = 0;
+	const listint_t *ret = find_loop_start(head, &i), *s = head;
 
 	while (s)
 	{
 		printf("[%p] %d\n", (void *)s, s->n);
-		count++;
 		s = s->next;
-		if (ret && ret == s)
+		count += 1;
+		lCount += (ret && ret == s ? 1 : 0);
+
+		if (ret && ((s == head) || (lCount == 2)))
 		{
-			if (++loopC == 2)
-			{
-				printf("-> [%p] %d\n", (void *)s, s->n);
-				return (count);
-			}
-			/*
-			*if (count == 1)
-			{
-				printf("[%p] %d\n", (void *)ret->next, ret->n);
-				printf("-> [%p] %d\n", (void *)s, s->n);
-				return (count + 1);
-			}
-			*/
+			if (lCount == 2)
+				printf("-> [%p] %d\n", (void *)ret, ret->n);
+			else
+				printf("-> [%p] %d\n", (void *)ret->next, ret->next->n);
+
+			return (count);
 		}
 	}
 	return (count);
