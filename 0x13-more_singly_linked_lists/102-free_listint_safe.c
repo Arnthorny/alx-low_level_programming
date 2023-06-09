@@ -35,10 +35,10 @@ listint_t *find_loop_st(listint_t *head, size_t *ind)
 }
 
 /**
-  *free_listint_safe - Frees elements of a listint_t list
-  * Also works if list has loop.
-  *@head: A singly linked list
-  *Return: The number of nodes in the list.
+ * free_listint_safe - Frees elements of a listint_t list
+ * Also works if list has loop.
+ * @h: Pointer to A singly linked list pointer
+ * Return: The number of nodes in the list.
  */
 size_t free_listint_safe(listint_t **h)
 {
@@ -62,12 +62,6 @@ size_t free_listint_safe(listint_t **h)
 		if (ret && ((s == *h) || (lCount == 2)))
 		{
 			*h = NULL;
-			/*
-			if (lCount == 2)
-				printf("-> [%p] %d\n", (void *)ret, ret->n);
-			else
-				printf("-> [%p] %d\n", (void *)ret->next, ret->next->n);
-			*/
 			return (count);
 		}
 	}
