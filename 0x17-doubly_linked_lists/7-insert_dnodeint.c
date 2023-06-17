@@ -2,41 +2,51 @@
 
 /**
   *insert_dnodeint_at_index - Function to insert node.at given idx in list
-  *@head: A pointer to linked list's head pointer.
+  *@h: A pointer to linked list's head pointer.
   *@idx: Location of insertion
   *@n: Data to be insert
   *Return: The address of new node or NULL if failed.
   */
-dlistint_t *insert_dnodeint_at_index\
-		   (dlistint_t **head, unsigned int idx, int n)
+dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 {
 	unsigned int icr = 0;
 	dlistint_t *hTmp, *node;
 
-	if (!head)
-		return (NULL);
-	hTmp = *head;
-
-	while (hTmp || idx == 0)
+	hTmp = h ? *h : NULL;
+	while (h && (hTmp || idx == 0))
 	{
-		if (icr == idx - 1 || idx == 0 || !hTmp->next)
+		if (icr == idx - 1 || idx == 0)
 		{
 			node = malloc(sizeof(dlistint_t));
-
 			if (!node)
 				return (NULL);
-
 			node->prev = hTmp;
+			node->next = NULL;
 			node->n = n;
-			node->next = idx != 0 ? hTmp->next : hTmp;
-			if (idx == 0)
-				hTmp = node;
+			if (!hTmp)
+				(*h) = node;
 			else
-				hTmp->next = node;
-			return (node);
+			{
+				if (idx == 0)
+				{
+					node->prev = NULL;
+					node->next = *h;
+					(*h)->prev = node;
+					(*h) = node;
+				}
+				else if (!hTmp->next)
+					hTmp->next = node;
+				else
+				{
+					node->next = hTmp->next;
+					hTmp->next->prev = node;
+					hTmp->next = node;
+				}
+			}
+				return (node);
 		}
-		hTmp = hTmp->next;
-		icr++;
+			hTmp = hTmp->next;
+			icr++;
 	}
-	return (NULL);
+		return (NULL);
 }
