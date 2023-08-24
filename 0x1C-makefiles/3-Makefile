@@ -1,0 +1,25 @@
+CC = gcc
+SRC = main.c school.c
+OBJ = $(SRC:.c=.o)
+NAME = school
+RM = rm
+
+# builds your executable
+all: $(OBJ)
+	$(CC) $(OBJ) -o $(NAME)
+
+# forces recompilation of all source files
+re: oclean all
+
+$(OBJ): %.o: %.c
+
+# deletes all Emacs and Vim temporary files along with the executable
+clean:
+	$(RM) -f *~ $(NAME) 
+
+# deletes the object files
+oclean:
+	$(RM) -f $(OBJ) 
+
+# deletes all Emacs and Vim temporary files, the executable, and the object files
+fclean: clean oclean
