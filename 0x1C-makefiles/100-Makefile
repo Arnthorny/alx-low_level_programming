@@ -5,7 +5,7 @@ NAME = school
 CFLAGS = -Wall -Werror -Wextra -pedantic
 
 # builds your executable
-all: $(NAME) m.h
+all: m.h  $(NAME)
 
 #Implicit rule that automatically builds executable and .o files
 $(NAME): $(OBJ)
