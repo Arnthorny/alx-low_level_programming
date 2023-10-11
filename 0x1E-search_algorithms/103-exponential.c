@@ -93,11 +93,11 @@ int exponential_search(int *array, size_t size, int value)
 		ri = ri != 0 ? ri * 2 : 1;
 		if (ri < size)
 			printf("Value checked array[%ld] = [%d]\n", ri, array[ri]);
-		if ((ri > size) || array[ri] >= value)
+		if ((ri >= size) || array[ri] >= value)
 		{
 			printf("Value found between indexes [%ld] and [%ld]\n",
 					le, min(ri, size - 1));
-			return (bin_srch(&array[le], (min(ri, size) - le), value, le));
+			return (bin_srch(&array[le], (min(ri + 1, size) - le), value, le));
 		}
 		else
 			le = ri;
